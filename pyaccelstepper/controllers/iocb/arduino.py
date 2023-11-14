@@ -28,6 +28,35 @@ SOFTWARE.
 
 from accel_stepper.controllers.icontroller import IController
 
+#region File Attributes
+
+__author__ = "Orlin Dimitrov"
+"""Author of the file."""
+
+__copyright__ = "Copyright 2023, Orlin Dimitrov"
+"""Copyright holder"""
+
+__credits__ = []
+"""Credits"""
+
+__license__ = "MIT"
+"""License
+@see http://www.gnu.org/licenses/"""
+
+__version__ = "1.0.0"
+"""Version of the file."""
+
+__maintainer__ = "Orlin Dimitrov"
+"""Name of the maintainer."""
+
+__email__ = "robko01@8bitclub.com"
+"""E-mail of the author."""
+
+__status__ = "Debug"
+"""File status."""
+
+#endregion
+
 class Arduino(IController):
 
     def pin_mode(self, pin, mode):

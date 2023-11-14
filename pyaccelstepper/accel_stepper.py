@@ -3,23 +3,26 @@
 
 """
 
-Stepper Motor Controller
+MIT License
 
-Copyright (C) [2020] [Orlin Dimitrov]
+Copyright (c) [2019] [Orlin Dimitrov]
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial SerialPortions of the Software.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 """
 
@@ -34,6 +37,35 @@ from accel_stepper.controllers.pin_state import PinState
 from accel_stepper.controllers.dummy.dummy import Dummy
 
 from accel_stepper.utils.utils import Utils
+
+#region File Attributes
+
+__author__ = "Orlin Dimitrov"
+"""Author of the file."""
+
+__copyright__ = "Copyright 2023, Orlin Dimitrov"
+"""Copyright holder"""
+
+__credits__ = []
+"""Credits"""
+
+__license__ = "MIT"
+"""License
+@see http://www.gnu.org/licenses/"""
+
+__version__ = "1.0.0"
+"""Version of the file."""
+
+__maintainer__ = "Orlin Dimitrov"
+"""Name of the maintainer."""
+
+__email__ = "robko01@8bitclub.com"
+"""E-mail of the author."""
+
+__status__ = "Debug"
+"""File status."""
+
+#endregion
 
 class AccelStepper:
     """Stepper Motor Controller"""

@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 
 """
 
 MIT License
 
-Copyright (c) [2019] [Orlin Dimitrov]
+Copyright (c) [2023] [Orlin Dimitrov]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +26,31 @@ SOFTWARE.
 
 """
 
-class Utils:
-    """Utilities"""
+#region File Attributes
 
-    @staticmethod
-    def constrain(value, min, max):
+__author__ = "Orlin Dimitrov"
+"""Author of the file."""
 
-        output = value
+__copyright__ = "Copyright 2023, Orlin Dimitrov"
+"""Copyright holder"""
 
-        if value < min:
-            output = min
+__credits__ = []
+"""Credits"""
 
-        elif value > max:
-            output = max
+__license__ = "MIT"
+"""License
+@see http://www.gnu.org/licenses/"""
 
-        return output
+__version__ = "1.0.0"
+"""Version of the file."""
+
+__maintainer__ = "Orlin Dimitrov"
+"""Name of the maintainer."""
+
+__email__ = "robko01@8bitclub.com"
+"""E-mail of the author."""
+
+__status__ = "Debug"
+"""File status."""
+
+#endregion

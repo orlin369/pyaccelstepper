@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import signal
 import time
 
-from accel_stepper.accel_stepper import AccelStepper
-from accel_stepper.interface_type import InterfaceType
+from .accel_stepper.accel_stepper import AccelStepper
+from .accel_stepper.interface_type import InterfaceType
 
 #region Variables
 
@@ -48,8 +48,8 @@ def ccw():
 
     print("CCW: {}: {}".format(__motor_controller.current_position, time.time()))
 
-def interupt_handler(signum, frame):
-    """Interupt handler."""
+def interrupt_handler(signum, frame):
+    """Interrupt handler."""
 
     global __time_to_stop, __motor_controller
 
@@ -63,8 +63,8 @@ def main():
     global __time_to_stop, __motor_controller
 
     # Add signal handler.
-    signal.signal(signal.SIGINT, interupt_handler)
-    signal.signal(signal.SIGTERM, interupt_handler)
+    signal.signal(signal.SIGINT, interrupt_handler)
+    signal.signal(signal.SIGTERM, interrupt_handler)
 
     # interface=InterfaceType.FULL4WIRE
     # interface=InterfaceType.HALF4WIRE
