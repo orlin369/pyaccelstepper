@@ -64,20 +64,16 @@ def long_description():
     with open('README.md', encoding='utf-8') as f:
         return f.read()
 
-install_requires = ["pygame", "pyserial",\
-               "PySide6", "PySide6-Addons",\
-               "PySide6-Essentials", "shiboken6"],
+install_requires = [],
 
 setup(
-    name="robko01",
-    packages=find_packages(include=["robko01", 'robko01.*']),
+    name="pyaccelsteppr",
+    packages=find_packages(include=["pyaccelsteppr", 'pyaccelsteppr.*']),
     entry_points={
-        'console_scripts': [
-            'robko01 = robko01.__main__:main'
-        ]
+        'console_scripts': []
     },
     version=__version__,
-    description="Robko 01 control library.",
+    description="Stepper motor ramp controller.",
     long_description=long_description(),
     long_description_content_type='text/markdown',
     author=__author__,
@@ -89,7 +85,7 @@ setup(
     tests_require=[],
     test_suite="",
     project_urls={
-        'GitHub': 'https://github.com/robko01/app_python3',
+        'GitHub': 'https://github.com/orlin369/pyaccelstepper',
     },
     classifiers=[
         'Development Status :: 1 - Debug',
@@ -97,9 +93,9 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Environment :: Console',
         'Intended Audience :: Developers',
-        'License :: GPLv3 License',
+        'License :: MIT License',
         'Topic :: Software Development',
-        'Topic :: Robot Programming'
+        'Topic :: Automation Programming'
     ],
-    package_data={'robko01.tasks.task_ui_qt.ui': ['*.ui']}
+    package_data={}
 )
