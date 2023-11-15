@@ -26,7 +26,7 @@ SOFTWARE.
 
 """
 
-from accel_stepper.controllers.icontroller import IController
+from pyaccelstepper.controllers.icontroller import IController
 
 #region File Attributes
 
@@ -40,8 +40,7 @@ __credits__ = []
 """Credits"""
 
 __license__ = "MIT"
-"""License
-@see http://www.gnu.org/licenses/"""
+"""License: https://choosealicense.com/licenses/mit/"""
 
 __version__ = "1.0.0"
 """Version of the file."""

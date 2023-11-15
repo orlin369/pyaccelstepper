@@ -38,8 +38,7 @@ __credits__ = []
 """Credits"""
 
 __license__ = "MIT"
-"""License
-@see http://www.gnu.org/licenses/"""
+"""License: https://choosealicense.com/licenses/mit/"""
 
 __version__ = "1.0.0"
 """Version of the file."""
