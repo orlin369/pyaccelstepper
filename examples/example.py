@@ -32,6 +32,34 @@ import time
 from pyaccelstepper.accel_stepper import AccelStepper
 from pyaccelstepper.interface_type import InterfaceType
 
+#region File Attributes
+
+__author__ = "Orlin Dimitrov"
+"""Author of the file."""
+
+__copyright__ = "Copyright 2023, Orlin Dimitrov"
+"""Copyright holder"""
+
+__credits__ = []
+"""Credits"""
+
+__license__ = "MIT"
+"""License: https://choosealicense.com/licenses/mit/"""
+
+__version__ = "1.0.0"
+"""Version of the file."""
+
+__maintainer__ = "Orlin Dimitrov"
+"""Name of the maintainer."""
+
+__email__ = "robko01@8bitclub.com"
+"""E-mail of the author."""
+
+__status__ = "Debug"
+"""File status."""
+
+#endregion
+
 #region Variables
 
 # Define some steppers and the pins the will use
@@ -45,12 +73,12 @@ __time_to_stop = False
 def cw():
     global __motor_controller
 
-    print("CW: {}: {}".format(__motor_controller.current_position, time.time()))
+    print(f"CW\t{__motor_controller.current_position}\t{time.time()}")
 
 def ccw():
     global __motor_controller
 
-    print("CCW: {}: {}".format(__motor_controller.current_position, time.time()))
+    print(f"CCW\t{__motor_controller.current_position}\t{time.time()}")
 
 def interrupt_handler(signum, frame):
     """Interrupt handler."""
@@ -59,7 +87,6 @@ def interrupt_handler(signum, frame):
 
     __time_to_stop = True
     __motor_controller.stop()
-
 
 def main():
     """Main function"""    
@@ -72,19 +99,19 @@ def main():
 
     # interface=InterfaceType.FULL4WIRE
     # interface=InterfaceType.HALF4WIRE
-    interface=InterfaceType.FULL3WIRE
+    # interface=InterfaceType.FULL3WIRE
     # interface=InterfaceType.HALF3WIRE
     # interface=InterfaceType.FULL2WIRE
     # interface=InterfaceType.DRIVER
-    # interface=InterfaceType.FUNCTION
+    interface=InterfaceType.FUNCTION
 
     __motor_controller = AccelStepper(
         cb_cw=[cw],
         cb_ccw=[ccw],
-        interface=interface,\
-        # pins=[0,1,2,3],\
-        # pins_inverted=[False, False, False, False],\
-        enable=True\
+        interface=interface,
+        pins=[4,5,6,7],
+        pins_inverted=[False, False, False, False],
+        enable=True
         )
 
     __motor_controller.speed_scale = 1
