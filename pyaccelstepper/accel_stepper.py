@@ -37,6 +37,7 @@ from pyaccelstepper.controllers.pin_state import PinState
 from pyaccelstepper.controllers.dummy.dummy import Dummy
 
 from pyaccelstepper.utils.utils import Utils
+from pyaccelstepper.platform_type import PlatformType, get_plpatform
 
 #region File Attributes
 
@@ -66,99 +67,102 @@ __status__ = "Debug"
 
 #endregion
 
+
+
 class AccelStepper:
     """Stepper Motor Controller"""
-
-#region Variables
-
-    __interface = InterfaceType.FUNCTION
-    """Signals interface.
-    """
-
-    __forward = []
-    """Forward list of callbacks.
-    """
-
-    __backward = []
-    """Backward list of callbacks.
-    """
-
-    __enable_pin = 255
-    """Enable pin index.
-    """
-
-    __pins = [0, 1, 2, 3]
-    """Pins that signals will go to.
-    """
-
-    __pins_inverted = [False, False, False, False]
-    """Inverted pins mask.
-    """
-
-    __enable_inverted = False
-    """Enable pin inverted mask.
-    """
-
-    __controller = Dummy()
-    """Controller that will pass the signals to the pins.
-    """
-
-    __speed = 0
-    """Speed
-    """
-
-    __max_speed = 0
-    """Maximum speed.
-    """
-
-    __acceleration = 0
-    """Acceleration
-    """
-
-    __current_pos = 0
-    """Axis current position.
-    """
-
-    __target_pos = 0
-    """Axis target position.
-    """
-
-    __step_interval = 0
-    """Time between steps.
-    """
-
-    __min_pulse_width = 1
-    """Minimum pulse width.
-    """
-
-    __last_step_time = 0
-    """LAst step time.
-    """
-    __direction = Direction.CCW
-    """Direction flag.
-    """
-
-    __n = int(0)
-    """State machine index.
-    """    
-
-    __sqrt_twoa = 1.0
-
-    __c0 = 0.0
-  
-    __cn = 0.0
-
-    __cmin = 1.0
-
-    __scale = 1.0 # 1000000.0 # 3.0
-
-#endregion
 
 #region Constructor
 
     def __init__(self, **config):
-        """[summary]
+        """Constructor
         """
+
+        self.__platform_type = get_plpatform()
+        """PlatformType type.
+        """        
+
+        self.__interface = InterfaceType.FUNCTION
+        """Signals interface.
+        """
+
+        self.__forward = []
+        """Forward list of callbacks.
+        """
+
+        self.__backward = []
+        """Backward list of callbacks.
+        """
+
+        self.__enable_pin = 255
+        """Enable pin index.
+        """
+
+        self.__pins = [0, 1, 2, 3]
+        """Pins that signals will go to.
+        """
+
+        self.__pins_inverted = [False, False, False, False]
+        """Inverted pins mask.
+        """
+
+        self.__enable_inverted = False
+        """Enable pin inverted mask.
+        """
+
+        self.__controller = Dummy()
+        """Controller that will pass the signals to the pins.
+        """
+
+        self.__speed = 0
+        """Speed
+        """
+
+        self.__max_speed = 0
+        """Maximum speed.
+        """
+
+        self.__acceleration = 0
+        """Acceleration
+        """
+
+        self.__current_pos = 0
+        """Axis current position.
+        """
+
+        self.__target_pos = 0
+        """Axis target position.
+        """
+
+        self.__step_interval = 0
+        """Time between steps.
+        """
+
+        self.__min_pulse_width = 1
+        """Minimum pulse width.
+        """
+
+        self.__last_step_time = 0
+        """LAst step time.
+        """
+
+        self.__direction = Direction.CCW
+        """Direction flag.
+        """
+
+        self.__n = int(0)
+        """State machine index.
+        """    
+
+        self.__sqrt_twoa = 1.0
+
+        self.__c0 = 0.0
+    
+        self.__cn = 0.0
+
+        self.__cmin = 1.0
+
+        self.__scale = 1.0 # 1000000.0 # 3.0
 
         if "interface" in config and config["interface"] is not None:
             self.__interface = config["interface"]
@@ -187,9 +191,6 @@ class AccelStepper:
         # Enable pin inverted.
         if "enable_inverted" in config and config["enable_inverted"] is not None:
             self.__enable_inverted = config["enable_inverted"]
-
-        for index in range(3):
-            self.__pins_inverted[index] = 0
 
         # Some reasonable default
         self.set_acceleration = 1
@@ -750,7 +751,11 @@ class AccelStepper:
         if self.__step_interval <= 0.0:
             return False
 
-        time_now = time.time()
+        time_now = 0
+        if self.__platform_type == PlatformType.WINDOWS:
+            time_now = time.time()
+        elif self.__platform_type == PlatformType.MICRO_PYTHON:
+            time_now = time.ticks_ms() / 1000
 
         if (time_now - self.__last_step_time) >= self.__step_interval:
             if self.__direction == Direction.CW:
