@@ -115,9 +115,9 @@ def main():
         )
 
     __motor_controller.speed_scale = 1
-    __motor_controller.max_speed = 55.0
+    __motor_controller.max_speed = 100.0
     __motor_controller.acceleration = 5.0
-    __motor_controller.set_speed = 1.0
+    __motor_controller.speed = 1.0
     __motor_controller.move_to(100.0)
 
     while not __time_to_stop:
