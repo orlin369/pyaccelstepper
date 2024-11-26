@@ -29,8 +29,7 @@ SOFTWARE.
 import signal
 import time
 
-from pyaccelstepper.accel_stepper import AccelStepper
-from pyaccelstepper.interface_type import InterfaceType
+from pyaccelstepper.accel_stepper import AccelStepper, InterfaceType
 
 #region File Attributes
 
