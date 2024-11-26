@@ -28,16 +28,7 @@ SOFTWARE.
 
 import time
 import math
-
-from pyaccelstepper.direction import Direction
-from pyaccelstepper.interface_type import InterfaceType
-
-from pyaccelstepper.controllers.pin_mode import PinMode
-from pyaccelstepper.controllers.pin_state import PinState
-from pyaccelstepper.controllers.dummy.dummy import Dummy
-
-from pyaccelstepper.utils.utils import Utils
-from pyaccelstepper.platform_type import PlatformType, get_plpatform
+import platform
 
 #region File Attributes
 
@@ -67,10 +58,121 @@ __status__ = "Debug"
 
 #endregion
 
+class Utils:
+    """Utilities"""
 
+    @staticmethod
+    def constrain(value, min, max):
+
+        output = value
+
+        if value < min:
+            output = min
+
+        elif value > max:
+            output = max
+
+        return output
+
+class PinMode:
+    Output = 1
+    Input = 2
+
+class PinState:
+    Low = 0
+    High = 15
+
+class IController(object):
+    """Interface class for the controllers.
+
+    Args:
+        object (object): Instance of the object.
+    """
+
+#region Variables
+
+    _config = None
+    """Config
+    """
+
+#endregion
+
+#region Constructor
+
+    def __init__(self, config={}):
+        """Constructor
+
+        Args:
+            config (dict, optional): Configuration objects. Defaults to {}.
+        """
+
+        self._config = config
+
+#endregion
+
+#region Public Methods
+
+    def pin_mode(self, pin, mode):
+        """Set the pin mode.
+
+        Args:
+            pin (int): Pin index.
+            mode (int): Mode.
+        """
+
+        pass
+
+    def digital_write(self, pin, state):
+        """Set the pin.
+
+        Args:
+            pin (int): Pin index.
+            state (int): State.
+        """
+
+        pass
+
+#endregion
+
+class PlatformType:
+    NONE = 0
+    WINDOWS = 1
+    LINUX = 2
+    MICRO_PYTHON = 3
+
+    @staticmethod
+    def get():
+        platform_info = platform.platform()
+        platform_type = PlatformType.NONE    
+        if "Windows" in platform_info:
+            platform_type = PlatformType.WINDOWS
+        elif "MicroPython" in platform_info:
+            platform_type = PlatformType.MICRO_PYTHON
+        return platform_type
+
+class InterfaceType:
+    """Driver interface type.
+    """
+
+    FUNCTION = 1
+    DRIVER = 2
+    FULL2WIRE = 3
+    FULL3WIRE = 4
+    FULL4WIRE = 5
+    HALF3WIRE = 6
+    HALF4WIRE = 7
+
+class Direction:
+    """Directions
+    """
+
+    NONE = 0
+    CW = 1
+    CCW = 2
 
 class AccelStepper:
-    """Stepper Motor Controller"""
+    """Stepper Motor Controller
+    """
 
 #region Constructor
 
@@ -78,8 +180,8 @@ class AccelStepper:
         """Constructor
         """
 
-        self.__platform_type = get_plpatform()
-        """PlatformType type.
+        self.__platform_type = PlatformType.get()
+        """Platform type.
         """        
 
         self.__interface = InterfaceType.FUNCTION
@@ -110,7 +212,7 @@ class AccelStepper:
         """Enable pin inverted mask.
         """
 
-        self.__controller = Dummy()
+        self.__controller = IController()
         """Controller that will pass the signals to the pins.
         """
 
@@ -839,3 +941,4 @@ class AccelStepper:
             self.move(-steps_to_stop)
 
 #endregion
+
