@@ -42,7 +42,7 @@ __credits__ = []
 """Credits"""
 
 __license__ = "MIT"
-"""License: https://choosealicense.com/licenses/mit/"""
+"""License: https:#choosealicense.com/licenses/mit/"""
 
 __version__ = "1.0.0"
 """Version of the file."""
@@ -942,3 +942,72 @@ class AccelStepper:
 
 #endregion
 
+class MultiStepper:
+
+    MULTISTEPPER_MAX_STEPPERS = 10
+
+#region Constructor
+
+    def __init__(self):
+        self._steppers = list()
+
+#endregion
+
+#region Public Methods
+
+    def add(self, stepper: AccelStepper):
+        if len(self._steppers) >= MultiStepper.MULTISTEPPER_MAX_STEPPERS:
+            return False # No room for more
+        
+        self._steppers.append(stepper)
+
+        return True
+
+    def move_to(self, absolute):
+        """First find the stepper that will take the longest time to move.
+
+        Args:
+            absolute (dict: AccelStepper]): _description_
+        """
+        longest_time = 0.0
+
+        for index in range(len(self._steppers)):
+            current_distance = absolute[index] - self._steppers[index].current_position
+            current_time = abs(current_distance) / self._steppers[index].max_speed
+
+            if current_time > longest_time:
+                longest_time = current_time
+
+        if longest_time > 0.0:
+            # Now work out a new max speed for each stepper so they will all 
+            # arrived at the same time of longest_time
+            for index in range(len(self._steppers)):
+                current_distance = absolute[index] - self._steppers[index].current_position
+                current_speed = current_distance / longest_time
+                self._steppers[index].move_to(absolute[index]) # New target position (resets speed)
+                self._steppers[index].max_speed = current_speed # New speed
+
+    def run(self):
+        """Returns true if any motor is still running to the target position.
+
+        Returns:
+            bool: State
+        """
+
+        state = False
+
+        for index in range(len(self._steppers)):
+            if self._steppers[index].distance_to_go != 0:
+                self._steppers[index].run_speed()
+                state = True
+        
+        return state
+
+    def run_speed_to_position(self):
+        """Blocks until all steppers reach their target position and are stopped
+        """
+
+        while self.run():
+            pass
+
+#endregion
