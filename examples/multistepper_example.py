@@ -60,10 +60,6 @@ __status__ = "Debug"
 
 #region Variables
 
-__motors = None
-"""Motors controller
-"""
-
 __time_to_stop = False
 """Time to stop flag.
 """
@@ -74,10 +70,10 @@ __pins = {
     "M1_STP": Pin(0, Pin.OUT),
     "M2_DIR": Pin(17, Pin.OUT),
     "M2_STP": Pin(16, Pin.OUT),
-    "M3_DIR": Pin(12, Pin.OUT),
-    "M3_STP": Pin(13, Pin.OUT),
-    "M4_DIR": Pin(25, Pin.OUT),
-    "M4_STP": Pin(26, Pin.OUT),
+    "M3_DIR": Pin(25, Pin.OUT),
+    "M3_STP": Pin(26, Pin.OUT),
+    "M4_DIR": Pin(12, Pin.OUT),
+    "M4_STP": Pin(13, Pin.OUT),
     "M5_DIR": Pin(27, Pin.OUT),
     "M5_STP": Pin(14, Pin.OUT),
     "M6_DIR": Pin(32, Pin.OUT),
@@ -87,6 +83,8 @@ __pins = {
     "M3_LIMIT": Pin(34, Pin.IN, Pin.PULL_UP),
     "M6_LIMIT": Pin(35, Pin.IN, Pin.PULL_UP),
     }
+"""IO pins.
+"""
 
 __axis = {
     "base": {
@@ -114,12 +112,26 @@ __axis = {
         "STP": __pins["M6_STP"]
         },
     }
+"""Axis definitions.
+"""
+
+__kin_motors = None
+"""Motors controller
+"""
+
+__pr_motors = None
+"""PR controller.
+"""
+
+__base = __shoulder = __rd = __ld = None
+"""Stepper controllers.
+"""
 
 #endregion
 
 def pulse(axis, direction=0, pulse=2):
     global __axis
-    
+
     # Set directio.
     __axis[axis]["DIR"].value(direction)
 
@@ -131,7 +143,7 @@ def pulse(axis, direction=0, pulse=2):
     __axis[axis]["STP"].value(1)
 
 def init():
-    global __pins, __motors
+    global __pins, __kin_motors, __pr_motors, __base, __shoulder, __rd, __ld
 
     # Disable drivers.
     __pins["Enable"].value(1)
@@ -148,44 +160,99 @@ def init():
     __pins["M6_DIR"].value(1)
     __pins["M6_STP"].value(1)
 
-    m_base = AccelStepper(
+    __base = AccelStepper(
         cb_cw=[lambda: pulse("base", 1)],
         cb_ccw=[lambda: pulse("base", 0)],
         interface=InterfaceType.FUNCTION,
         enable=True
         )
-    m_base.speed_scale = 1
-    m_base.max_speed = 1000.0
-    m_base.acceleration = 1000.0
-    m_base.speed = 1.0
-
-    m_shoulder = AccelStepper(
+    __base.speed_scale = 1
+    __base.max_speed = 1000.0
+    __base.acceleration = 1000.0
+    __base.speed = 1.0
+    __shoulder = AccelStepper(
         cb_cw=[lambda: pulse("shoulder", 1)],
         cb_ccw=[lambda: pulse("shoulder", 0)],
         interface=InterfaceType.FUNCTION,
         enable=True
         )
-    m_shoulder.speed_scale = 1
-    m_shoulder.max_speed = 500.0
-    m_shoulder.acceleration = 500.0
-    m_shoulder.speed = 1.0
+    __shoulder.speed_scale = 1
+    __shoulder.max_speed = 500.0
+    __shoulder.acceleration = 500.0
+    __shoulder.speed = 1.0
+    __kin_motors = MultiStepper()
+    __kin_motors.add(__base)
+    __kin_motors.add(__shoulder)
 
-    __motors = MultiStepper()
-    __motors.add(m_base)
-    __motors.add(m_shoulder)
-
-def main():
-    """Main function"""    
-
-    global __pins, __time_to_stop, __motors
-
-    init()
+    __ld = AccelStepper(
+        cb_cw=[lambda: pulse("ld", 1)],
+        cb_ccw=[lambda: pulse("ld", 0)],
+        interface=InterfaceType.FUNCTION,
+        enable=True
+        )
+    __ld.speed_scale = 1
+    __ld.max_speed = 1500.0
+    __ld.acceleration = 1000.0
+    __ld.speed = 1.0
+    __rd = AccelStepper(
+        cb_cw=[lambda: pulse("rd", 1)],
+        cb_ccw=[lambda: pulse("rd", 0)],
+        interface=InterfaceType.FUNCTION,
+        enable=True
+        )
+    __rd.speed_scale = 1
+    __rd.max_speed = 1500.0
+    __rd.acceleration = 1000.0
+    __rd.speed = 1.0
+    __pr_motors = MultiStepper()
+    __pr_motors.add(__ld)
+    __pr_motors.add(__rd)
 
     # Enable drivers.
     __pins["Enable"].value(0)
 
-    __motors.move_to([300, 150])
-    __motors.run_speed_to_position()
+def move_kin(pos):
+    global __kin_motors, __base, __shoulder
+
+    # Set the goals.
+    __kin_motors.move_to(pos)
+
+    # Achieve the goals.
+    __kin_motors.run_speed_to_position()
+    
+    # Reset the controller.
+    __base.set_current_position(0)
+    __shoulder.set_current_position(0)
+
+def move_pr(pos):
+    global __pr_motors, __rd, __ld
+
+    # Set the goals.
+    __pr_motors.move_to(pos)
+
+    # Achieve the goals.
+    __pr_motors.run_speed_to_position()
+
+    # Reset the controller.
+    __rd.set_current_position(0)
+    __ld.set_current_position(0)
+
+def main():
+    """Main function"""
+
+    global __time_to_stop
+
+    init()
+
+    move_kin([300, 225])
+    move_kin([-300, -225])
+
+    move_pr([200, 200])
+    move_pr([-200, -200])
+    move_pr([-200, 200])
+    move_pr([200, -200])
+
+    print("DONE")
 
 if __name__ == "__main__":
     try:
