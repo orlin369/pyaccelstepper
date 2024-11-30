@@ -344,6 +344,19 @@ class AccelStepper:
 
         return self.__current_pos
 
+    @current_position.setter
+    def current_position(self, current_position):
+        """Set the current position.
+
+        Args:
+            current_position (float): Current position of the axis.
+        """
+
+        if current_position == self.__current_pos:
+            return
+        
+        self.__current_pos = current_position
+
     @property
     def speed(self):
         """Returns the speed.
