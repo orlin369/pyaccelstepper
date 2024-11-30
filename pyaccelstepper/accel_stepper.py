@@ -962,7 +962,7 @@ class MultiStepper:
 #region Constructor
 
     def __init__(self):
-        self._steppers = list()
+        self._steppers = [AccelStepper]
 
 #endregion
 
@@ -996,6 +996,7 @@ class MultiStepper:
             # arrived at the same time of longest_time
             for index in range(len(self._steppers)):
                 current_distance = absolute[index] - self._steppers[index].current_position
+                # S = v * t
                 current_speed = current_distance / longest_time
                 self._steppers[index].move_to(absolute[index]) # New target position (resets speed)
                 self._steppers[index].max_speed = current_speed # New speed
