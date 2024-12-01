@@ -208,18 +208,21 @@ def init():
     __pr_motors.add(__ld)
     __pr_motors.add(__rd)
 
-    # Enable drivers.
-    __pins["Enable"].value(0)
-
 def move_kin(pos):
     global __kin_motors, __base, __shoulder
+
+    # Enable drivers.
+    __pins["Enable"].value(0)
 
     # Set the goals.
     __kin_motors.move_to(pos)
 
     # Achieve the goals.
     __kin_motors.run_speed_to_position()
-    
+
+    # Disable drivers.
+    __pins["Enable"].value(1)
+
     # Reset the controller.
     __base.set_current_position(0)
     __shoulder.set_current_position(0)
@@ -227,11 +230,17 @@ def move_kin(pos):
 def move_pr(pos):
     global __pr_motors, __rd, __ld
 
+    # Enable drivers.
+    __pins["Enable"].value(0)
+
     # Set the goals.
     __pr_motors.move_to(pos)
 
     # Achieve the goals.
     __pr_motors.run_speed_to_position()
+
+    # Disable drivers.
+    __pins["Enable"].value(1)
 
     # Reset the controller.
     __rd.set_current_position(0)

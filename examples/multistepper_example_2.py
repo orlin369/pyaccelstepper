@@ -230,18 +230,21 @@ def init():
     __multi_motors.add(__axis_4)
     __multi_motors.add(__axis_5)
 
+def move_kin(pos):
+    global __pins, __multi_motors, __axis_0, __axis_1, __axis_2, __axis_3, __axis_4, __axis_5
+
     # Enable drivers.
     __pins["Enable"].value(0)
-
-def move_kin(pos):
-    global __multi_motors, __axis_0, __axis_1
 
     # Set the goals.
     __multi_motors.move_to(pos)
 
     # Achieve the goals.
     __multi_motors.run_speed_to_position()
-    
+
+    # Disable drivers.
+    __pins["Enable"].value(1)
+
     # Reset the controller.
     __axis_0.set_current_position(0)
     __axis_1.set_current_position(0)
@@ -269,3 +272,4 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
        __time_to_stop = True
+
