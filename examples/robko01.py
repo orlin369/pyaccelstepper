@@ -76,10 +76,10 @@ __pins = {
     "M2_STP": Pin(16, Pin.OUT),
     "M3_DIR": Pin(12, Pin.OUT),
     "M3_STP": Pin(13, Pin.OUT),
-    "M4_DIR": Pin(25, Pin.OUT),
-    "M4_STP": Pin(26, Pin.OUT),
-    "M5_DIR": Pin(27, Pin.OUT),
-    "M5_STP": Pin(14, Pin.OUT),
+    "M4_DIR": Pin(27, Pin.OUT),
+    "M4_STP": Pin(14, Pin.OUT),
+    "M5_DIR": Pin(25, Pin.OUT),
+    "M5_STP": Pin(26, Pin.OUT),
     "M6_DIR": Pin(32, Pin.OUT),
     "M6_STP": Pin(33, Pin.OUT),
     "M1_LIMIT": Pin(36, Pin.IN, Pin.PULL_UP),
@@ -87,6 +87,8 @@ __pins = {
     "M3_LIMIT": Pin(34, Pin.IN, Pin.PULL_UP),
     "M6_LIMIT": Pin(35, Pin.IN, Pin.PULL_UP),
     }
+"""IO pins.
+"""
 
 __axis = {
     "base": {
